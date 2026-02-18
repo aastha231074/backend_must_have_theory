@@ -109,7 +109,56 @@
 
 ---
 
-## 🚀 One-Liner
+## Stateless vs Stateful
 
-👉 **Asymmetric is used to securely exchange keys, symmetric is used to encrypt actual data.**
+### Stateless
+A **stateless** system does not store any information about previous interactions.  
+Each request is independent and contains all the data needed to process it.
+
+**Key Points:**
+- No memory of past requests (at application/server level)
+- Easier to scale horizontally
+- Simpler architecture
+- Example: HTTP requests, REST APIs
+
+**Note:**
+You *can* use a **shared external store** (like Redis, DB, cache) to keep data accessible across servers.  
+In that case, the **application remains stateless**, while the **state is managed externally**.
+
+---
+
+### Stateful
+A **stateful** system retains information about previous interactions within the system itself.  
+It remembers context between requests.
+
+**Key Points:**
+- Maintains session or state in the server
+- Harder to scale (needs session affinity / sticky sessions)
+- More complex to manage
+- Example: In-memory sessions on a server
+
+---
+
+### Stateless with Shared State (Best Practice)
+Instead of storing state inside the server:
+- Use **shared storage** (Redis, DB, distributed cache)
+- Any server can handle any request
+- Enables true horizontal scaling
+
+**Example:**
+- User logs in → session stored in Redis  
+- Next request → any server fetches session from Redis  
+
+---
+
+### Quick Comparison
+
+| Feature        | Stateless (Pure)     | Stateless + Shared Store | Stateful (Server-side) |
+|---------------|--------------------|-------------------------|------------------------|
+| Memory        | No                 | External                | Internal               |
+| Scalability   | High               | Very High               | Moderate/Low           |
+| Complexity    | Low                | Medium                  | High                   |
+| Example       | REST API           | API + Redis session     | In-memory session      |
+
+
 
