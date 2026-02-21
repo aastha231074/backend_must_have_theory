@@ -161,6 +161,53 @@ Instead of storing state inside the server:
 | Example       | REST API           | API + Redis session     | In-memory session      |
 
 ---
+# Authentication Methods
+
+1. API Keys  
+2. JWT  
+3. OAuth  
+
+---
+
+# API Keys
+
+An **API key** is a simple unique key used to access an API.
+
+### How it is used:
+- Sent as part of the **request headers**
+- Used to identify the client making the request
+
+### Example:
+```
+GET /data
+Headers:
+    x-api-key: abc123xyz
+```
+
+### Key Points:
+- Easy to implement
+- Less secure compared to JWT/OAuth
+- No built-in expiry (unless manually handled)
+- Should be kept secret
+
+---
+
+# OAuth
+
+**OAuth** is an authorization framework that allows third-party applications to access user data without sharing credentials.
+
+### Example:
+- "Login with Google"
+- "Login with Facebook"
+
+### Key Points:
+- Uses access tokens instead of passwords
+- More secure and scalable
+- Involves multiple steps (authorization flow)
+- Supports scopes and permissions
+
+
+---
 # JWT (JSON Web Token)
 
 A **JWT (JSON Web Token)** is a **compact, URL-safe token** used to securely transmit information between a client and a server.
@@ -277,5 +324,6 @@ signature = HMACSHA256(
 
 - **HS256 (HMAC)** → same secret key for sign & verify  
 - **RS256 (RSA)** → private key signs, public key verifies  
+
 
 
