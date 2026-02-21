@@ -160,5 +160,122 @@ Instead of storing state inside the server:
 | Complexity    | Low                | Medium                  | High                   |
 | Example       | REST API           | API + Redis session     | In-memory session      |
 
+---
+# JWT (JSON Web Token)
+
+A **JWT (JSON Web Token)** is a **compact, URL-safe token** used to securely transmit information between a client and a server.
+
+It is commonly used for **authentication and authorization**.
+
+---
+
+## Structure of JWT
+
+A JWT consists of **3 parts** separated by dots:
+
+```
+xxxx.yyyy.zzzz
+```
+
+---
+
+### 1. Header
+
+Contains metadata about the token:
+
+- Algorithm used for signing (e.g., HS256, RS256)
+- Token type (JWT)
+
+**Example:**
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+---
+
+### 2. Payload (Data)
+
+Contains the actual data (called **claims**):
+
+- `user_id`
+- `email`
+- `role`
+- `exp` (expiry time)
+
+⚠️ Note: Payload is **not encrypted**, only encoded → anyone can decode it.
+
+**Example:**
+```json
+{
+  "user_id": 123,
+  "role": "admin",
+  "exp": 1710000000
+}
+```
+
+---
+
+### 3. Signature
+
+Used to **verify integrity** of the token.
+
+**Formula:**
+```
+signature = HMACSHA256(
+    base64urlencode(header) + "." +
+    base64urlencode(payload),
+    secret_key
+)
+```
+
+---
+
+## Important Clarifications
+
+### URL-safe means:
+- Uses Base64URL encoding
+- Avoids characters like `+`, `/`, `=`
+- Safe to send in URLs, headers, cookies
+
+---
+
+## How JWT Works (Flow)
+
+1. User logs in → sends id/password  
+2. Server verifies credentials  
+3. Server creates JWT using **secret key**  
+4. Client stores JWT (cookie/localStorage)  
+5. Client sends JWT in every request  
+6. Server verifies signature → allows access  
+
+---
+
+## Key Insights
+
+- Server **does NOT store session**
+- JWT is **stateless authentication**
+- Signature ensures:
+  - Data is not tampered
+  - Token is valid
+
+---
+
+## Common Mistakes
+
+- ❌ `"role": admin` → invalid JSON  
+- ✅ `"role": "admin"`
+
+- ❌ JWT is encrypted  
+- ✅ JWT is **encoded + signed**, not encrypted
+
+---
+
+## Secret Key vs Public Key
+
+- **HS256 (HMAC)** → same secret key for sign & verify  
+- **RS256 (RSA)** → private key signs, public key verifies  
 
 
